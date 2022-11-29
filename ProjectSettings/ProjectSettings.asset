@@ -154,7 +154,10 @@ PlayerSettings:
   resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Android: com.DefaultCompany.CardGameDemoProject
+    Standalone: com.DefaultCompany.Card-Game-Demo-Project
+    iPhone: com.DefaultCompany.Card-Game-Demo-Project
   buildNumber:
     Standalone: 0
     iPhone: 0

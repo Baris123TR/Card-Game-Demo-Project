@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Bronze Wheel
   m_EditorClassIdentifier: 
   _type: Bronze
+  _items: {fileID: 11400000, guid: 601e62075facd7840a9bd8cedefa6384, type: 2}
   _wheel: {fileID: 21300000, guid: 9a4d93964de661a4c91ccc01883f4712, type: 3}
   _indicator: {fileID: 21300000, guid: 51a9a67ba8f66c444970f0ae0c15ca78, type: 3}
