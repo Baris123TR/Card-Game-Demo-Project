@@ -6,9 +6,15 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Wheel Objects/Wheels", fileName = "New Wheel")]
 public class ScriptableWheel : ScriptableObject
 {
-    public string _type;
-    public Sprite _wheel;
-    public Sprite _indicator;
+    public WheelTypeNameAndImages _wheelTypeData;
+
+    public enum Type
+    {
+        Bronze,
+        Silver,
+        Gold
+    }
+    public Type _type;
     [Space(10)]
     [Header("For Random Fill")]
     public bool _fillContentRandomly;

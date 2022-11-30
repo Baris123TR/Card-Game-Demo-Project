@@ -19,6 +19,8 @@ public class WheelAssignScript : MonoBehaviour
     }
     public void GetDistributersAndFillLists()
     {
+        _slotDistributerList.Clear();
+
         SlotContentDistributer[] ListArray = GetComponentsInChildren<SlotContentDistributer>();
         int ListAmount = ListArray.Length;
         for (int i = 0; i < ListAmount; i++)
@@ -41,23 +43,38 @@ public class WheelAssignScript : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < _scriptableWheel._scriptableContents.Length; i++)
+            for (int i = 0; i < _slotDistributerList.Count; i++)
             {
-                _slotDistributerList[i]._scriptableWheelItems =
-                    _scriptableWheel._scriptableContents[_scriptableWheel._scriptableContents.Length];
+                if (i < _scriptableWheel._scriptableContentsWithQueue.Length)
+                {
+                    _slotDistributerList[i]._scriptableWheelItems =
+                        _scriptableWheel._scriptableContentsWithQueue[i];
+                }
             }
         }
     }
-    public void UpdateWheel()
+    private void FillTheListsAccordingly()
     {
-        _slotDistributerList.Clear();
         GetDistributersAndFillLists();
         FillTheSlotsWithContent();
-        _slotDistributerList.Clear();
         GetDistributersAndFillLists();
-        for (int i = 0; i < _slotDistributerList.Count; i++)
+    }
+    public void UpdateWheel()
+    {
+        FillTheListsAccordingly();
+        if (_scriptableWheel._fillContentRandomly)
         {
-            _slotDistributerList[i].UpdateContent();
+            for (int i = 0; i < _slotDistributerList.Count; i++)
+            {
+                _slotDistributerList[i].UpdateContent();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _scriptableWheel._scriptableContentsWithQueue.Length; i++)
+            {
+                _slotDistributerList[i].UpdateContent();
+            }
         }
     }
 }
