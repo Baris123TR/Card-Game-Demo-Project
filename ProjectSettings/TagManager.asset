@@ -7,6 +7,9 @@ TagManager:
   - SpinButton
   - UpdateToggle
   - CameraToggle
+  - FPS_set
+  - WheelToSpin
+  - PublicValues
   layers:
   - Default
   - TransparentFX
