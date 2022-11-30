@@ -7,7 +7,14 @@ using UnityEngine.UI;
 public class ScriptableWheel : ScriptableObject
 {
     public string _type;
-    public WheelContent[] _scriptableContents;
     public Sprite _wheel;
     public Sprite _indicator;
+    [Space(10)]
+    [Header("For Random Fill")]
+    public bool _fillContentRandomly;
+    public ScriptableWheelContent _bomb;
+    public ScriptableWheelContent[] _scriptableContents;
+    [Space(10)]
+    [Header("For Filling Content Correspondingly")]
+    public ScriptableWheelContent[] _scriptableContentsWithQueue;
 }

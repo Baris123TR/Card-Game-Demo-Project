@@ -17,5 +17,5 @@ MonoBehaviour:
   _bonusAmountRandomBetween: {x: 0, y: 0}
   _rarity: 0
   _weaponTypeName: 
-  _offerShine: 0
+  _offerShine: 1
   _particles: 0
