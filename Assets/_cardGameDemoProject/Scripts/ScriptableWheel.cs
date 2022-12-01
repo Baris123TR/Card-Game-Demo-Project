@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(menuName = "Wheel Objects/Wheels", fileName = "New Wheel")]
+[CreateAssetMenu(menuName = "Card Game Objects/Wheel/New Wheel", fileName = "New Wheel")]
 public class ScriptableWheel : ScriptableObject
 {
     public WheelTypeNameAndImages _wheelTypeData;

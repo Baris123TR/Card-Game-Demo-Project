@@ -5,10 +5,10 @@ using UnityEngine;
 public class FlashAnimSpinner : MonoBehaviour
 {
     float _zRotation;
-    PublicValues _publicValues;
+    PublicValuesAndFunctions _publicValues;
     private void Awake()
     {
-        _publicValues = FindObjectOfType<PublicValues>();
+        _publicValues = FindObjectOfType<PublicValuesAndFunctions>();
     }
     // Update is called once per frame
     void Update()

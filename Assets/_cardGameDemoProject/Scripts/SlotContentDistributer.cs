@@ -6,7 +6,7 @@ using TMPro;
 
 public class SlotContentDistributer : MonoBehaviour
 {
-    PublicValues _publicValues;
+    PublicValuesAndFunctions _publicValues;
 
     [Header("Scriptable Data")]
     public ScriptableWheelContent _scriptableWheelItems;
@@ -26,7 +26,7 @@ public class SlotContentDistributer : MonoBehaviour
     public int _bonusAmount;
     private void Awake()
     {
-        _publicValues = FindObjectOfType<PublicValues>();
+        _publicValues = FindObjectOfType<PublicValuesAndFunctions>();
     }
     
     private void BombFunction()

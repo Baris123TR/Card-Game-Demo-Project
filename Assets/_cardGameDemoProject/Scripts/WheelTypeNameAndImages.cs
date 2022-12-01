@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Wheel Objects/Wheel Type Data", fileName = "Wheel Type Data")]
+[CreateAssetMenu(menuName = "Card Game Objects/Wheel/New Wheel Type Data", fileName = "Wheel Type Data")]
 public class WheelTypeNameAndImages : ScriptableObject
 {
     [Header("Bronze")]

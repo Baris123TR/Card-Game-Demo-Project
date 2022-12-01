@@ -10,6 +10,7 @@ TagManager:
   - FPS_set
   - WheelToSpin
   - PublicValues
+  - Wheel
   layers:
   - Default
   - TransparentFX

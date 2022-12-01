@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class SpinScript : MonoBehaviour
 {
     public RectTransform _targetToSpin;
-    public Button SpinButton;
+    public Button _spinButton;
     public Vector2 RotationAmountBetween = new Vector2(1, 3);
     public float RotationDuration;
     public float RealignToCenterDuration = 0.5f;
@@ -58,7 +58,11 @@ public class SpinScript : MonoBehaviour
     [HideInInspector] public bool LockSlotRotationsBool;
     private void Awake()
     {
-        SpinButton.onClick.AddListener(Spin);
+        _spinButton.onClick.AddListener(Spin);
+        if (!_spinButton)
+        {
+            _spinButton = GameObject.FindWithTag("SpinButton").GetComponent<Button>();
+        }
     }
     public void RectRotCalcButton()
     {
@@ -71,7 +75,7 @@ public class SpinScript : MonoBehaviour
         Rotate.ForceInit();
         Rotate.OnStart(() =>
         {
-            SpinButton.interactable = false;
+            _spinButton.interactable = false;
             LockSlotRotationsBool = true;
         }).OnComplete(()=>
         {
@@ -101,7 +105,7 @@ public class SpinScript : MonoBehaviour
         AlignToSliceCenter.OnComplete(()=>
         {
             LockSlotRotationsBool = false;
-            SpinButton.interactable = true;
+            _spinButton.interactable = true;
         });
     }
 }
