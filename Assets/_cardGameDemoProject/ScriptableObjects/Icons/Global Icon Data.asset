@@ -15,5 +15,12 @@ MonoBehaviour:
   _allSpritesAtlas: {fileID: 4343727234628468602, guid: 1512affdf3bb555439e79627c13687db, type: 2}
   _gold: {fileID: 21300000, guid: cb84e226186a8094195c2f8291c82c08, type: 3}
   _cash: {fileID: 21300000, guid: e5ad1fd5185c20743acefd21b7347c18, type: 3}
-  _weaponUpgrade: {fileID: 0}
-  _gearUpgrade: {fileID: 0}
+  _weaponUpgrade: {fileID: 21300000, guid: 3b223c4eb5259ab41a604d6440cdfe3d, type: 3}
+  _gearUpgrade: {fileID: 21300000, guid: 9f70572cc91b5c34b8901c41eac292ef, type: 3}
+  _zoomedNormal: {fileID: 21300000, guid: 063c8264eda832a42ab8813e77568990, type: 3}
+  _zoomedSuper: {fileID: 21300000, guid: d9a26ec63442e7847b143d8fb7b295d9, type: 3}
+  _zoomedGold: {fileID: 21300000, guid: 2c99dea1a27713c40951fb27438f6c10, type: 3}
+  _normal: {fileID: 21300000, guid: 5c49c60513d26454097aed7c52100d10, type: 3}
+  _normalLevelColor: {r: 0, g: 0.7597966, b: 1, a: 1}
+  _superLevelColor: {r: 0, g: 1, b: 0.046581507, a: 1}
+  _goldLevelColor: {r: 1, g: 0.70921594, b: 0, a: 1}

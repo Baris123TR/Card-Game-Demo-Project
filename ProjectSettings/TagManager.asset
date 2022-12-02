@@ -11,11 +11,15 @@ TagManager:
   - WheelToSpin
   - PublicValues
   - Wheel
+  - UI_Gold
+  - UI_Cash
+  - UI_WeaponPoints
+  - UI_GearPoints
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - UI_Level
   - Water
   - UI
   - 

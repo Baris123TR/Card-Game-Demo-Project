@@ -15,4 +15,15 @@ public class ScriptableItemIcons : ScriptableObject
     public Sprite _cash;
     public Sprite _weaponUpgrade;
     public Sprite _gearUpgrade;
+
+    [Header("Level Sprites")]
+    public Sprite _zoomedNormal;
+    public Sprite _zoomedSuper;
+    public Sprite _zoomedGold;
+
+    public Sprite _normal;
+
+    public Color _normalLevelColor;
+    public Color _superLevelColor;
+    public Color _goldLevelColor;
 }

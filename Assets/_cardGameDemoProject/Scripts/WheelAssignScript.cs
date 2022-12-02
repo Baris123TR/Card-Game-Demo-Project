@@ -11,7 +11,7 @@ public class WheelAssignScript : MonoBehaviour
     public Image _wheel;
     public Image _wheelIndicator;
     public Transform _slotsParentTransform;
-    /*[HideInInspector]*/ public List<SlotContentDistributer> _slotDistributerList;
+    [HideInInspector] public List<SlotContentDistributer> _slotDistributerList;
 
     private void Awake()
     {
