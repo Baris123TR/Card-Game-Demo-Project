@@ -17,16 +17,9 @@ MonoBehaviour:
   _fillContentRandomly: 1
   _bomb: {fileID: 11400000, guid: 9e500629ce7060c499640e8bde5f92fd, type: 2}
   _scriptableContents:
-  - {fileID: 11400000, guid: 601e62075facd7840a9bd8cedefa6384, type: 2}
-  - {fileID: 11400000, guid: c710f20098091fd4680f2a1eedcacd64, type: 2}
-  - {fileID: 11400000, guid: 73f8a0bf32e842040a1f7b94e7f1dbec, type: 2}
+  - {fileID: 11400000, guid: 2bfcb9a3f6f33df48b9ac3495cff18d6, type: 2}
   - {fileID: 11400000, guid: e9c7c67f2b5d3794f96283bbbd028287, type: 2}
-  - {fileID: 11400000, guid: c710f20098091fd4680f2a1eedcacd64, type: 2}
-  - {fileID: 11400000, guid: c710f20098091fd4680f2a1eedcacd64, type: 2}
-  - {fileID: 11400000, guid: c710f20098091fd4680f2a1eedcacd64, type: 2}
-  - {fileID: 11400000, guid: a5169373624977740ba18f63c45435ce, type: 2}
-  - {fileID: 11400000, guid: 73f8a0bf32e842040a1f7b94e7f1dbec, type: 2}
-  - {fileID: 11400000, guid: 73f8a0bf32e842040a1f7b94e7f1dbec, type: 2}
+  - {fileID: 11400000, guid: 1fa855325780a7745bea7cb381e8d534, type: 2}
   _scriptableContentsWithQueue:
   - {fileID: 11400000, guid: e9c7c67f2b5d3794f96283bbbd028287, type: 2}
   - {fileID: 11400000, guid: 9e500629ce7060c499640e8bde5f92fd, type: 2}

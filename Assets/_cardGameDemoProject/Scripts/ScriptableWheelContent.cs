@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Card Game Objects/Wheel/New Wheel Content", fileName = "Wheel Content")]
-public class ScriptableWheelContent : ScriptableObject
+public class ScriptableWheelContent : ItemTypeIncludedMonoBehaviour
 {
     public string _newNameString;
     public GameObject _iconPrefabToInstantiate;
@@ -22,14 +22,7 @@ public class ScriptableWheelContent : ScriptableObject
             }
         }
     }
-    public enum ItemType
-    {
-        Gold,
-        Cash,
-        WeaponPoint,
-        UpgradePoint,
-        Bomb
-    }
+    
     public ItemType _itemType;
 
     public Sprite _contentImage;

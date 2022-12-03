@@ -185,6 +185,8 @@ MonoBehaviour:
   _slotsParent: {fileID: 5490578716739589889}
   _slots: []
   _choosenSlot: {fileID: 0}
+  _choosenSlotParent: {fileID: 0}
+  _cloneIconsParent: {fileID: 0}
   CounterClockwise: 0
   LockSlotRotationsBool: 0
 --- !u!114 &1590696095267917321

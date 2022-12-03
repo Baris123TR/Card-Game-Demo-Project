@@ -19,7 +19,8 @@ public class SpinScript : MonoBehaviour
     public GameObject _slotsParent;
     public GameObject[] _slots;
     [HideInInspector] public GameObject _choosenSlot;
-    public GameObject _choosenSlotParent;
+    public GameObject _choosenSlotTransform;
+    public GameObject _cloneIconsParent;
     GameObject _canvas;
 
     float _sliceCenterAngle = 45;
@@ -160,66 +161,69 @@ public class SpinScript : MonoBehaviour
         //print(SlotNumber);
         _choosenSlot = _slots[SlotNumber];
         //print(_choosenSlot);
-        StartCoroutine(ChoosenSlotAppearIconFlyAnimation(_choosenSlot, Vector3.one * 1.5f, 6, _choosenSlotParent.transform));
+        StartCoroutine(CardAppearIconFlyAnimation(_choosenSlot, Vector3.one * 1.5f, 6, _choosenSlotTransform.transform));
         _publicValues.WheelDisapeear();
     }
-    IEnumerator ChoosenSlotAppearIconFlyAnimation(GameObject ChoosenSlotObject, Vector3 TargetVector, 
+
+    public GameObject[] _iconsSpawned;
+
+    IEnumerator CardAppearIconFlyAnimation(GameObject ChoosenSlotObject, Vector3 TargetVector, 
         int AmountOfIconsToAppear = 1, Transform TransformParent = null)
     {
-        yield return InstantiateObjectWithScaleTween(ChoosenSlotObject, TargetVector, TransformParent, true);
+        yield return _publicValues.InstantiateObjectWithScaleTween(ChoosenSlotObject, TargetVector, TransformParent).WaitForCompletion();
         GameObject IconObject = ChoosenSlotObject.GetComponentInChildren<EmptyBonusAmountIconGetScript>(true).gameObject;
-        for (int i = 0; i < AmountOfIconsToAppear; i++)
+
+        for (int i = 1; i <= AmountOfIconsToAppear; i++)
         {
-            yield return InstantiateObjectWithScaleTween(IconObject, IconObject.transform.localScale, _choosenSlotParent.transform, false, true);
+            if (i == AmountOfIconsToAppear)
+            {
+                yield return _publicValues.InstantiateObjectWithScaleTween(IconObject, 
+                    IconObject.transform.localScale, _cloneIconsParent.transform, true).WaitForCompletion();
+            }
+            else
+            {
+                yield return _publicValues.InstantiateObjectWithScaleTween(IconObject, 
+                    IconObject.transform.localScale, _cloneIconsParent.transform, true);
+            }
+        }
+
+        _iconsSpawned = new GameObject[_cloneIconsParent.transform.childCount];
+        for (int i = 0; i < _iconsSpawned.Length; i++)
+        {
+            _iconsSpawned[i] = _cloneIconsParent.transform.GetChild(i).gameObject;
+        }
+
+        StartCoroutine(GetItemTypeAndMoveItemsToTargetArea(ChoosenSlotObject));
+    }
+    IEnumerator GetItemTypeAndMoveItemsToTargetArea(GameObject ChoosenSlotObject)
+    {
+        CollectedAreas[] _possessions = FindObjectsOfType<CollectedAreas>();
+        var ChoosenSlotObjectType = ChoosenSlotObject.GetComponent<SlotContentDistributer>()._scriptableWheelItems._itemType;
+        GameObject TargetTransformGameObject = null;
+        for (int i = 0; i < _possessions.Length; i++)
+        {
+            if (_possessions[i]._itemTypeScript._itemType == ChoosenSlotObjectType)
+            {
+                TargetTransformGameObject = _possessions[i].gameObject;
+            }
+        }
+
+        for (int i = 0; i < _iconsSpawned.Length; i++)
+        {
+            print(_iconsSpawned);
+            if (i == _iconsSpawned.Length)
+            {
+                yield return MoveObjectToDesiredParentTween(_iconsSpawned[i].gameObject, TargetTransformGameObject.gameObject).WaitForCompletion();
+            }
+            else
+            {
+                yield return MoveObjectToDesiredParentTween(_iconsSpawned[i].gameObject, TargetTransformGameObject.gameObject);
+            }
         }
     }
-
-
-
-    public IEnumerator InstantiateObjectWithScaleTween(GameObject ObjectToInstantiateAndScale, 
-        Vector3 TargetScaleOfInstantiatedObject, Transform TransformParent, bool WaitForCompletion, bool ScatterAround = false)
+    public Tween MoveObjectToDesiredParentTween(GameObject ObjectToMove, GameObject DesiredParentObject)
     {
-        print(ObjectToInstantiateAndScale + " will be instantiated and scaled.");
-
-        GameObject InstantiatedObject = Instantiate(ObjectToInstantiateAndScale, TransformParent);
-
-        if (InstantiatedObject.GetComponent<SlotRotationFixer>())
-        {
-            Destroy(InstantiatedObject.GetComponent<SlotRotationFixer>());
-        }
-        if (InstantiatedObject.transform.
-            GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true))
-        {
-            GameObject BackgroundParent;
-            BackgroundParent = InstantiatedObject.transform.
-               GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true).gameObject;
-            BackgroundParent.SetActive(true);
-        }
-
-        InstantiatedObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-        InstantiatedObject.transform.localScale = Vector3.zero;
-
-        if (WaitForCompletion)
-        {
-            yield return _publicValues.ObjectAppearAndDissappearTween(InstantiatedObject,
-                TargetScaleOfInstantiatedObject).WaitForCompletion();
-        }
-        else
-        {
-
-            yield return _publicValues.ObjectAppearAndDissappearTween(InstantiatedObject,
-                   TargetScaleOfInstantiatedObject);
-        }
-
-        if (ScatterAround)
-        {
-            float Random1 = Random.Range(_publicValues._scatterRangeBetween.x, _publicValues._scatterRangeBetween.y);
-            float Random2 = Random.Range(_publicValues._scatterRangeBetween.x, _publicValues._scatterRangeBetween.y);
-            Vector2 RandomVector = new Vector2(Random1, Random2);
-            print(RandomVector);
-            yield return InstantiatedObject.transform.DOLocalMove(InstantiatedObject.transform.localPosition + 
-                new Vector3(RandomVector.x, RandomVector.y, 0), 
-                _publicValues._levelDesignerScript._itemsTweeningDuration);
-        }
+        ObjectToMove.transform.parent = DesiredParentObject.transform;
+        return ObjectToMove.transform.DOLocalMove(Vector3.zero, _publicValues._levelDesignerScript._itemsTweeningDuration);
     }
 }

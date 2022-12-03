@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ExitButtonScript : MonoBehaviour, IButtonFunctions
+public class ExitButtonScript : MonoBehaviour
 {
     [Header("Langugage Data")]
     public ScriptableLanguageSelector _languageAndStringData;

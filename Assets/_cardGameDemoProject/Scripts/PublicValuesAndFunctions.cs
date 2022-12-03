@@ -153,4 +153,47 @@ public class PublicValuesAndFunctions : MonoBehaviour
             PanelButtons[i].enabled = ExitButtonFunction;
         }
     }
+    public Tween InstantiateObjectWithScaleTween(GameObject ObjectToInstantiateAndScale,
+       Vector3 TargetScaleOfInstantiatedObject, Transform TransformParent, bool ScatterAround = false)
+    {
+        //print(ObjectToInstantiateAndScale + " will be instantiated and scaled.");
+
+        GameObject InstantiatedObject = Instantiate(ObjectToInstantiateAndScale, TransformParent);
+
+        if (InstantiatedObject.GetComponent<SlotRotationFixer>())
+        {
+            Destroy(InstantiatedObject.GetComponent<SlotRotationFixer>());
+        }
+        if (InstantiatedObject.transform.
+            GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true))
+        {
+            GameObject BackgroundParent;
+            BackgroundParent = InstantiatedObject.transform.
+               GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true).gameObject;
+            BackgroundParent.SetActive(true);
+        }
+
+        InstantiatedObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        InstantiatedObject.transform.localScale = Vector3.zero;
+
+        if (ScatterAround)
+        {
+            float Random1 = Random.Range(_scatterRangeBetween.x, _scatterRangeBetween.y);
+            float Random2 = Random.Range(_scatterRangeBetween.x, _scatterRangeBetween.y);
+            Vector2 RandomVector = new Vector2(Random1, Random2);
+            //print(RandomVector); 
+            
+            ObjectAppearAndDissappearTween(InstantiatedObject,
+                 TargetScaleOfInstantiatedObject);
+
+            return InstantiatedObject.transform.DOLocalMove(InstantiatedObject.transform.localPosition +
+                new Vector3(RandomVector.x, RandomVector.y, 0),
+                _levelDesignerScript._itemsTweeningDuration);
+        }
+        else
+        {
+            return ObjectAppearAndDissappearTween(InstantiatedObject,
+                TargetScaleOfInstantiatedObject);
+        }
+    }
 }

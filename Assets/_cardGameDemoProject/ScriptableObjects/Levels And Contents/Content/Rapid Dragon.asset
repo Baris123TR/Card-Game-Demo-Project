@@ -19,7 +19,7 @@ MonoBehaviour:
   _bonusAmountRandomBetween: {x: 20, y: 40}
   _bonusAmountTextAndIconEnabled: 1
   _rarity: 4
-  _generalColor: {r: 1, g: 1, b: 1, a: 1}
+  _generalColor: {r: 1, g: 0.44470766, b: 0, a: 1}
   _weaponTypeName: P90
   _weaponTypeNameTexAndBackgroundEnabled: 1
   _offerShineEnabled: 1
