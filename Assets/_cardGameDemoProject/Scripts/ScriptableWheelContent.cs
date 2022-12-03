@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class ScriptableWheelContent : ScriptableObject
 {
     public string _newNameString;
+    public GameObject _iconPrefabToInstantiate;
     public string _name
     {
         get

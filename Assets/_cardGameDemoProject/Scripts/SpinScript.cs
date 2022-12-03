@@ -20,6 +20,7 @@ public class SpinScript : MonoBehaviour
     public GameObject[] _slots;
     [HideInInspector] public GameObject _choosenSlot;
     public GameObject _choosenSlotParent;
+    GameObject _canvas;
 
     float _sliceCenterAngle = 45;
 
@@ -72,6 +73,18 @@ public class SpinScript : MonoBehaviour
     {
         _publicValues = GameObject.FindWithTag("PublicValues").GetComponent<PublicValuesAndFunctions>();
 
+        if (!_canvas)
+        {
+            if (GameObject.FindWithTag("Canvas"))
+            {
+                _canvas = GameObject.FindWithTag("Canvas");
+            }
+            else
+            {
+                print("Canvas can't be found.");
+            }
+        }
+
         if (!_spinButton)
         {
             _spinButton = GameObject.FindWithTag("SpinButton").GetComponent<Button>();
@@ -98,12 +111,6 @@ public class SpinScript : MonoBehaviour
 
         _wheelParent.transform.localScale = Vector3.zero;
         _playButton.transform.localScale = _playButtonScaleAtStart;
-    }
-
-    
-    public void RectRotCalcButton()
-    {
-        print(_targetToSpin.rotation.eulerAngles);
     }
     public void Spin()
     {
@@ -143,7 +150,7 @@ public class SpinScript : MonoBehaviour
             GetTheSelectedSlot();
         });
     }
-    public void GetTheSelectedSlot()
+    void GetTheSelectedSlot()
     {
         float RotationAngle = transform.GetComponent<RectTransform>().rotation.eulerAngles.z;
         //print(RotationAngle);
@@ -153,24 +160,66 @@ public class SpinScript : MonoBehaviour
         //print(SlotNumber);
         _choosenSlot = _slots[SlotNumber];
         //print(_choosenSlot);
-        ChoosenSlotCloneAndAppear(_choosenSlot, Vector3.one * 1.5f);
+        StartCoroutine(ChoosenSlotAppearIconFlyAnimation(_choosenSlot, Vector3.one * 1.5f, 6, _choosenSlotParent.transform));
         _publicValues.WheelDisapeear();
     }
-    public void ChoosenSlotCloneAndAppear(GameObject ChoosenSlotObject, Vector3 TargetScaleOfInstantiatedObject)
+    IEnumerator ChoosenSlotAppearIconFlyAnimation(GameObject ChoosenSlotObject, Vector3 TargetVector, 
+        int AmountOfIconsToAppear = 1, Transform TransformParent = null)
     {
-        GameObject InstantiatedChoosenSlotObject = Instantiate(ChoosenSlotObject, _choosenSlotParent.transform);
-        Destroy(InstantiatedChoosenSlotObject.GetComponent<SlotRotationFixer>());
-        GameObject BackgroundParent = InstantiatedChoosenSlotObject.transform.
-            GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true).gameObject;
-        BackgroundParent.SetActive(true);
-        InstantiatedChoosenSlotObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-        InstantiatedChoosenSlotObject.transform.localScale = Vector3.zero;
-        _publicValues.ObjectAppearAndDissappearTween(InstantiatedChoosenSlotObject, 
-            TargetScaleOfInstantiatedObject).ForceInit();
-        _publicValues.ObjectAppearAndDissappearTween(InstantiatedChoosenSlotObject,
-            TargetScaleOfInstantiatedObject).OnComplete(()=>
-            {
-                print("Icons appear.");
-            });
+        yield return InstantiateObjectWithScaleTween(ChoosenSlotObject, TargetVector, TransformParent, true);
+        GameObject IconObject = ChoosenSlotObject.GetComponentInChildren<EmptyBonusAmountIconGetScript>(true).gameObject;
+        for (int i = 0; i < AmountOfIconsToAppear; i++)
+        {
+            yield return InstantiateObjectWithScaleTween(IconObject, IconObject.transform.localScale, _choosenSlotParent.transform, false, true);
+        }
+    }
+
+
+
+    public IEnumerator InstantiateObjectWithScaleTween(GameObject ObjectToInstantiateAndScale, 
+        Vector3 TargetScaleOfInstantiatedObject, Transform TransformParent, bool WaitForCompletion, bool ScatterAround = false)
+    {
+        print(ObjectToInstantiateAndScale + " will be instantiated and scaled.");
+
+        GameObject InstantiatedObject = Instantiate(ObjectToInstantiateAndScale, TransformParent);
+
+        if (InstantiatedObject.GetComponent<SlotRotationFixer>())
+        {
+            Destroy(InstantiatedObject.GetComponent<SlotRotationFixer>());
+        }
+        if (InstantiatedObject.transform.
+            GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true))
+        {
+            GameObject BackgroundParent;
+            BackgroundParent = InstantiatedObject.transform.
+               GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true).gameObject;
+            BackgroundParent.SetActive(true);
+        }
+
+        InstantiatedObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        InstantiatedObject.transform.localScale = Vector3.zero;
+
+        if (WaitForCompletion)
+        {
+            yield return _publicValues.ObjectAppearAndDissappearTween(InstantiatedObject,
+                TargetScaleOfInstantiatedObject).WaitForCompletion();
+        }
+        else
+        {
+
+            yield return _publicValues.ObjectAppearAndDissappearTween(InstantiatedObject,
+                   TargetScaleOfInstantiatedObject);
+        }
+
+        if (ScatterAround)
+        {
+            float Random1 = Random.Range(_publicValues._scatterRangeBetween.x, _publicValues._scatterRangeBetween.y);
+            float Random2 = Random.Range(_publicValues._scatterRangeBetween.x, _publicValues._scatterRangeBetween.y);
+            Vector2 RandomVector = new Vector2(Random1, Random2);
+            print(RandomVector);
+            yield return InstantiatedObject.transform.DOLocalMove(InstantiatedObject.transform.localPosition + 
+                new Vector3(RandomVector.x, RandomVector.y, 0), 
+                _publicValues._levelDesignerScript._itemsTweeningDuration);
+        }
     }
 }

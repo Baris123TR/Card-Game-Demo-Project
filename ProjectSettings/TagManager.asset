@@ -15,6 +15,7 @@ TagManager:
   - UI_Cash
   - UI_WeaponPoints
   - UI_GearPoints
+  - Canvas
   layers:
   - Default
   - TransparentFX

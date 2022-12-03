@@ -59,6 +59,9 @@ public class PublicValuesAndFunctions : MonoBehaviour
     public GameObject[] _weaponUpgradeObjects;
     public GameObject[] _gearUpgradeObjects;
 
+    [Header("Icon Tween")]
+    public Vector2 _scatterRangeBetween = new Vector2(-200, 200);
+
     [Space(10)]
     [Header("DOTween Related")]
     public Vector2 _tweenCapacity = new Vector2(1000, 1000);
