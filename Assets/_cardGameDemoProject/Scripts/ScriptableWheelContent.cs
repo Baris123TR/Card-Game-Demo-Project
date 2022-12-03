@@ -6,6 +6,21 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Card Game Objects/Wheel/New Wheel Content", fileName = "Wheel Content")]
 public class ScriptableWheelContent : ScriptableObject
 {
+    public string _newNameString;
+    public string _name
+    {
+        get
+        {
+            if (_newNameString == "")
+            {
+                return name;
+            }
+            else
+            {
+                return _newNameString;
+            }
+        }
+    }
     public enum ItemType
     {
         Gold,
@@ -19,6 +34,7 @@ public class ScriptableWheelContent : ScriptableObject
     public Sprite _contentImage;
 
     public Vector2 _bonusAmountRandomBetween;
+    public bool _bonusAmountTextAndIconEnabled;
 
     [HideInInspector]
     public int _bonusAmountCalculated
@@ -37,10 +53,14 @@ public class ScriptableWheelContent : ScriptableObject
         Legendary
     }
     public Rarity _rarity;
+
+    [Header("Colors")]
+    public Color _generalColor;
     
     [Header("Weapon Name")]
     public string _weaponTypeName;
+    public bool _weaponTypeNameTexAndBackgroundEnabled;
     [Header("Item Specs")]
-    public bool _offerShine;
-    public bool _particles;
+    public bool _offerShineEnabled;
+    public bool _activateParticles;
 }

@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Item Type
+  m_text: Item Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -26.316467, y: 0, z: -28.549446, w: -20.597351}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -162,15 +162,15 @@ RectTransform:
   m_GameObject: {fileID: 605656489652013373}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 791742536810441820}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -129, y: 0}
+  m_AnchoredPosition: {x: -80, y: 0}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6676960354542364953
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -429,7 +429,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -0.5619469, w: 0}
+  m_margin: {x: 79.08582, y: 0, z: 5.3939247, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 997132014136269003}
   - component: {fileID: 3321882603416151492}
   - component: {fileID: 861965504548636154}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -462,8 +462,8 @@ RectTransform:
   m_GameObject: {fileID: 2433319358585156683}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8557876185886431924}
   m_RootOrder: 2
@@ -548,7 +548,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -725,7 +725,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 13
+      scalar: 17.68
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5638,7 +5638,6 @@ GameObject:
   - component: {fileID: 1327767283124810269}
   - component: {fileID: 263870574308021303}
   - component: {fileID: 5995015839594498437}
-  - component: {fileID: 5909082265224927793}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -5704,18 +5703,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5909082265224927793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5237006157619041501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb2094c76717d564f9035b3935883e66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5242962686411684284
 GameObject:
   m_ObjectHideFlags: 0
@@ -5973,6 +5960,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7992366338715319300}
+  - component: {fileID: 6900763536826578644}
   m_Layer: 5
   m_Name: Hide
   m_TagString: Untagged
@@ -6004,6 +5992,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 293.6, y: 420}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6900763536826578644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6352401595864480892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d14cf399002fb49a4987131b999924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7720304784821155457
 GameObject:
   m_ObjectHideFlags: 0
@@ -6091,6 +6091,7 @@ GameObject:
   - component: {fileID: 8557876185886431924}
   - component: {fileID: 8557876185886431930}
   - component: {fileID: 8716524970757701150}
+  - component: {fileID: 3131603066532119214}
   m_Layer: 5
   m_Name: Slot (1)
   m_TagString: Untagged
@@ -6141,19 +6142,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb3f49cc5fff0094fb4364b76f1c0402, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wheelItems: {fileID: 11400000, guid: 73f8a0bf32e842040a1f7b94e7f1dbec, type: 2}
+  _scriptableWheelItems: {fileID: 0}
   _content: {fileID: 5995015839594498437}
   _backgroundImage: {fileID: 9047404566488683409}
   _backgroundBorder: {fileID: 1797285425703672460}
   _flash: {fileID: 1857043167857185721}
   _offerShine: {fileID: 1396513184313932466}
   _weaponTypeBackgroundImage: {fileID: 7473537642140612650}
-  _weaponTypeName: {fileID: 3597984997203404192}
+  _bonusIcon: {fileID: 8838552702181194395}
+  _weaponTypeNameText: {fileID: 3597984997203404192}
   _itemType: {fileID: 4389774196183644044}
   _name: {fileID: 4389774196183644044}
-  _generalColor: {r: 0, g: 0, b: 0, a: 0}
+  _bonusAmountText: {fileID: 6383779134842427488}
   _particleSystem: {fileID: 3321882603416151492}
   _bonusAmount: 0
+  _particleActiveBool: 0
+--- !u!114 &3131603066532119214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8557876185886431925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb2094c76717d564f9035b3935883e66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8880068031473285072
 GameObject:
   m_ObjectHideFlags: 0

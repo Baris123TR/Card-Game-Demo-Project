@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Card Game Objects/Wheel/New Wheel", fileName = "New Wheel")]
 public class ScriptableWheel : ScriptableObject
 {
-    public WheelTypeNameAndImages _wheelTypeData;
+    public ScriptableWheelTypeNameAndImages _wheelTypeData;
 
     public enum Type
     {

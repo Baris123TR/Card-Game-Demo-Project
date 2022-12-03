@@ -1,16 +1,28 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 public class SpinScript : MonoBehaviour
 {
+    PublicValuesAndFunctions _publicValues;
+
     public RectTransform _targetToSpin;
+    public GameObject _wheelParent;
     public Button _spinButton;
+    public Button _playButton;
     public Vector2 RotationAmountBetween = new Vector2(1, 3);
     public float RotationDuration;
     public float RealignToCenterDuration = 0.5f;
-    [HideInInspector]
+    [HideInInspector] public Vector3 _wheelScaleAtStart;
+    [HideInInspector] public Vector3 _playButtonScaleAtStart;
+    public GameObject _slotsParent;
+    public GameObject[] _slots;
+    [HideInInspector] public GameObject _choosenSlot;
+    public GameObject _choosenSlotParent;
+
+    float _sliceCenterAngle = 45;
+
     public float RotationDurationCalculator
     {
         get
@@ -58,17 +70,41 @@ public class SpinScript : MonoBehaviour
     [HideInInspector] public bool LockSlotRotationsBool;
     private void Awake()
     {
-        _spinButton.onClick.AddListener(Spin);
+        _publicValues = GameObject.FindWithTag("PublicValues").GetComponent<PublicValuesAndFunctions>();
+
         if (!_spinButton)
         {
             _spinButton = GameObject.FindWithTag("SpinButton").GetComponent<Button>();
         }
+
+        _slots = new GameObject[_slotsParent.transform.childCount];
+        for (int i = 0; i < _slots.Length; i++)
+        {
+            _slots[i] = transform.GetChild(0).GetChild(i).gameObject;
+        }
+
+        _spinButton.onClick.AddListener(Spin);
+
+        GetAndSetScaleInfo();
     }
+    private void Start()
+    {
+        
+    }
+    private void GetAndSetScaleInfo()
+    {
+        _wheelScaleAtStart = _wheelParent.transform.localScale;
+        _playButtonScaleAtStart = _playButton.transform.localScale;
+
+        _wheelParent.transform.localScale = Vector3.zero;
+        _playButton.transform.localScale = _playButtonScaleAtStart;
+    }
+
+    
     public void RectRotCalcButton()
     {
         print(_targetToSpin.rotation.eulerAngles);
     }
-
     public void Spin()
     {
         Tween Rotate = RotateTheWheel(_targetToSpin, _rotation, RotationDurationCalculator, RotateMode.FastBeyond360, true);
@@ -85,14 +121,13 @@ public class SpinScript : MonoBehaviour
     void SpinEndingSliceAligner()
     {
         float ZRotationOfWheel = _targetToSpin.rotation.eulerAngles.z;
-        float SliceCenterAngle = 45;
         float HalfOfSliceCenterAngle = 22.5f;
-        float Kalan = ZRotationOfWheel % SliceCenterAngle;
-        if (ZRotationOfWheel % SliceCenterAngle != 0)
+        float Kalan = ZRotationOfWheel % _sliceCenterAngle;
+        if (ZRotationOfWheel % _sliceCenterAngle != 0)
         {
             if (Kalan > HalfOfSliceCenterAngle)
             {
-                ZRotationOfWheel += (SliceCenterAngle - Kalan);
+                ZRotationOfWheel += (_sliceCenterAngle - Kalan);
             }
             else
             {
@@ -105,7 +140,37 @@ public class SpinScript : MonoBehaviour
         AlignToSliceCenter.OnComplete(()=>
         {
             LockSlotRotationsBool = false;
-            _spinButton.interactable = true;
+            GetTheSelectedSlot();
         });
+    }
+    public void GetTheSelectedSlot()
+    {
+        float RotationAngle = transform.GetComponent<RectTransform>().rotation.eulerAngles.z;
+        //print(RotationAngle);
+        int RotationAngleInt = Mathf.RoundToInt(RotationAngle);
+        //print(RotationAngleInt);
+        int SlotNumber = (RotationAngleInt / 45) % _slots.Length;
+        //print(SlotNumber);
+        _choosenSlot = _slots[SlotNumber];
+        //print(_choosenSlot);
+        ChoosenSlotCloneAndAppear(_choosenSlot, Vector3.one * 1.5f);
+        _publicValues.WheelDisapeear();
+    }
+    public void ChoosenSlotCloneAndAppear(GameObject ChoosenSlotObject, Vector3 TargetScaleOfInstantiatedObject)
+    {
+        GameObject InstantiatedChoosenSlotObject = Instantiate(ChoosenSlotObject, _choosenSlotParent.transform);
+        Destroy(InstantiatedChoosenSlotObject.GetComponent<SlotRotationFixer>());
+        GameObject BackgroundParent = InstantiatedChoosenSlotObject.transform.
+            GetComponentInChildren<EmptyScriptForFindingHiddenBackground>(true).gameObject;
+        BackgroundParent.SetActive(true);
+        InstantiatedChoosenSlotObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        InstantiatedChoosenSlotObject.transform.localScale = Vector3.zero;
+        _publicValues.ObjectAppearAndDissappearTween(InstantiatedChoosenSlotObject, 
+            TargetScaleOfInstantiatedObject).ForceInit();
+        _publicValues.ObjectAppearAndDissappearTween(InstantiatedChoosenSlotObject,
+            TargetScaleOfInstantiatedObject).OnComplete(()=>
+            {
+                print("Icons appear.");
+            });
     }
 }

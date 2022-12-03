@@ -10,4 +10,8 @@ public class FPSSet : MonoBehaviour
     {
         Application.targetFrameRate = _targetFps;
     }
+    private void Start()
+    {
+        
+    }
 }

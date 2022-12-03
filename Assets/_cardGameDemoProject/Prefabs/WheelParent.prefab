@@ -174,10 +174,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetToSpin: {fileID: 6718937466960766126}
+  _wheelParent: {fileID: 6718937466663492462}
   _spinButton: {fileID: 0}
+  _playButton: {fileID: 0}
   RotationAmountBetween: {x: 1, y: 2}
   RotationDuration: 3
   RealignToCenterDuration: 0.5
+  _wheelScaleAtStart: {x: 0, y: 0, z: 0}
+  _playButtonScaleAtStart: {x: 0, y: 0, z: 0}
+  _slotsParent: {fileID: 5490578716739589889}
+  _slots: []
+  _choosenSlot: {fileID: 0}
   CounterClockwise: 0
   LockSlotRotationsBool: 0
 --- !u!114 &1590696095267917321
@@ -192,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4695bee7a27607478fce0db9fd8c60d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scriptableWheel: {fileID: 0}
+  _scriptableWheelData: {fileID: 0}
   _wheel: {fileID: 6718937466960766127}
   _wheelIndicator: {fileID: 6718937468161110344}
   _slotsParentTransform: {fileID: 3043828753472628031}

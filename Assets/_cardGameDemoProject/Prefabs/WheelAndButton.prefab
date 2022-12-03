@@ -122,6 +122,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5989133194393037462 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8634868382626861319, guid: 0976ab73f055a544f916068017e9f90c, type: 3}
+  m_PrefabInstance: {fileID: 2650539784010070929}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7279024728726173915 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4741394920696447818, guid: 0976ab73f055a544f916068017e9f90c, type: 3}
@@ -227,11 +238,24 @@ PrefabInstance:
       value: Wheel
       objectReference: {fileID: 0}
     - target: {fileID: 6718937466960766125, guid: 63acb83e62b6f8948883d4f675f1d90a, type: 3}
+      propertyPath: _playButton
+      value: 
+      objectReference: {fileID: 5989133194393037462}
+    - target: {fileID: 6718937466960766125, guid: 63acb83e62b6f8948883d4f675f1d90a, type: 3}
       propertyPath: _spinButton
       value: 
       objectReference: {fileID: 2487351290221448759}
+    - target: {fileID: 6718937466960766125, guid: 63acb83e62b6f8948883d4f675f1d90a, type: 3}
+      propertyPath: _wheelParent
+      value: 
+      objectReference: {fileID: 7913735287699794070}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63acb83e62b6f8948883d4f675f1d90a, type: 3}
+--- !u!1 &7913735287699794070 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6718937466663492462, guid: 63acb83e62b6f8948883d4f675f1d90a, type: 3}
+  m_PrefabInstance: {fileID: 3525555823866262520}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7913735287699794071 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6718937466663492463, guid: 63acb83e62b6f8948883d4f675f1d90a, type: 3}

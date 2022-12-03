@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class WheelAssignScript : MonoBehaviour
 {
     [Header("Scriptable Data")]
-    public ScriptableWheel _scriptableWheel;
+    public ScriptableWheel _scriptableWheelData;
     [Header("Hierarchy")]
     public Image _wheel;
     public Image _wheelIndicator;
@@ -15,7 +15,7 @@ public class WheelAssignScript : MonoBehaviour
 
     private void Awake()
     {
-        UpdateWheel();
+        
     }
     public void GetDistributersAndFillLists()
     {
@@ -30,25 +30,41 @@ public class WheelAssignScript : MonoBehaviour
     }
     public void FillTheSlotsWithContent()
     {
-        int RandomMemberIDForBomb = Random.Range(0,_slotDistributerList.Count);
-        _slotDistributerList[RandomMemberIDForBomb]._scriptableWheelItems = _scriptableWheel._bomb;
-        _slotDistributerList.RemoveAt(RandomMemberIDForBomb);
-        if (_scriptableWheel._fillContentRandomly)
+        if (_scriptableWheelData._type == ScriptableWheel.Type.Bronze)
+        {
+            int RandomMemberIDForBomb = Random.Range(0, _slotDistributerList.Count);
+            _slotDistributerList[RandomMemberIDForBomb]._scriptableWheelItems = _scriptableWheelData._bomb;
+            _slotDistributerList.RemoveAt(RandomMemberIDForBomb);
+
+            _wheel.sprite = _scriptableWheelData._wheelTypeData._bronzeWheel;
+            _wheelIndicator.sprite = _scriptableWheelData._wheelTypeData._bronzeIndicator;
+        }
+        else if (_scriptableWheelData._type == ScriptableWheel.Type.Silver)
+        {
+            _wheel.sprite = _scriptableWheelData._wheelTypeData._silverWheel;
+            _wheelIndicator.sprite = _scriptableWheelData._wheelTypeData._silverIndicator;
+        }
+        else
+        {
+            _wheel.sprite = _scriptableWheelData._wheelTypeData._goldWheel;
+            _wheelIndicator.sprite = _scriptableWheelData._wheelTypeData._goldIndicator;
+        }
+        if (_scriptableWheelData._fillContentRandomly)
         {
             for (int i = 0; i < _slotDistributerList.Count; i++)
             {
                 _slotDistributerList[i]._scriptableWheelItems =
-                    _scriptableWheel._scriptableContents[Random.Range(0, _scriptableWheel._scriptableContents.Length)];
+                    _scriptableWheelData._scriptableContents[Random.Range(0, _scriptableWheelData._scriptableContents.Length)];
             }
         }
         else
         {
             for (int i = 0; i < _slotDistributerList.Count; i++)
             {
-                if (i < _scriptableWheel._scriptableContentsWithQueue.Length)
+                if (i < _scriptableWheelData._scriptableContentsWithQueue.Length)
                 {
                     _slotDistributerList[i]._scriptableWheelItems =
-                        _scriptableWheel._scriptableContentsWithQueue[i];
+                        _scriptableWheelData._scriptableContentsWithQueue[i];
                 }
             }
         }
@@ -62,7 +78,7 @@ public class WheelAssignScript : MonoBehaviour
     public void UpdateWheel()
     {
         FillTheListsAccordingly();
-        if (_scriptableWheel._fillContentRandomly)
+        if (_scriptableWheelData._fillContentRandomly)
         {
             for (int i = 0; i < _slotDistributerList.Count; i++)
             {
@@ -71,7 +87,7 @@ public class WheelAssignScript : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < _scriptableWheel._scriptableContentsWithQueue.Length; i++)
+            for (int i = 0; i < _scriptableWheelData._scriptableContentsWithQueue.Length; i++)
             {
                 _slotDistributerList[i].UpdateContent();
             }

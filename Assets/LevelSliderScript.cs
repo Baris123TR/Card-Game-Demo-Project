@@ -32,7 +32,7 @@ public class LevelSliderScript : MonoBehaviour
     }
     private void Start()
     {
-        print(_publicValues._levelDesignerScript._levelCount);
+        
     }
     public void StartLevel()
     {
@@ -40,9 +40,9 @@ public class LevelSliderScript : MonoBehaviour
     }
     public void NextLevel()
     {
-        if (_publicValues._levelDesignerScript._levelCount < _publicValues._levelDesignerScript._numberOfLevels)
+        if (_publicValues._levelCount < _publicValues._levelDesignerScript._numberOfLevels)
         {
-            _publicValues._levelDesignerScript._levelCount++;
+            _publicValues._levelCount++;
 
             _slideBetweenLevels(_publicValues._levelSlider,
                 _publicValues._activeLevelIndicator.sizeDelta.x).ForceInit();
@@ -58,7 +58,7 @@ public class LevelSliderScript : MonoBehaviour
         }
         else
         {
-            _publicValues._levelDesignerScript._levelCount = 1;
+            _publicValues._levelCount = 1;
 
             _slideBetweenLevels(_publicValues._levelSlider,
                 Vector3.zero).ForceInit();
@@ -72,7 +72,5 @@ public class LevelSliderScript : MonoBehaviour
                     _testButton.interactable = true;
                 });
         }
-
-        print(_publicValues._levelDesignerScript._levelCount);
     }
 }

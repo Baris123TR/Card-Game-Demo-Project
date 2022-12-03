@@ -4,10 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.U2D;
 using TMPro;
+using UnityEngine.Rendering;
+using DG.Tweening;
 
 public class PublicValuesAndFunctions : MonoBehaviour
 {
     [HideInInspector] public LevelDesignerScript _levelDesignerScript;
+    [HideInInspector] public WheelAssignScript _wheelAssignScript;
+
+    [HideInInspector] public int _levelCount;
+
+    [Header("Level Loader")]
+    public SpinScript _spinScript;
+
+    [Header("UI Camera")]
+    public Camera _parcileCamera;
 
     [Space(10)]
     [Header("Wheel")]
@@ -47,6 +58,10 @@ public class PublicValuesAndFunctions : MonoBehaviour
     public GameObject[] _cashObjects;
     public GameObject[] _weaponUpgradeObjects;
     public GameObject[] _gearUpgradeObjects;
+
+    [Space(10)]
+    [Header("DOTween Related")]
+    public Vector2 _tweenCapacity = new Vector2(1000, 1000);
     private void PublicDistributer(GameObject[] ObjectsToDistribute, Sprite IconToDistribute = null)
     {
         if (IconToDistribute)
@@ -74,14 +89,44 @@ public class PublicValuesAndFunctions : MonoBehaviour
     }
     private void Awake()
     {
+        _spinScript._spinButton.interactable = false;
+
+        _wheelAssignScript = GameObject.FindWithTag("Wheel").GetComponent<WheelAssignScript>();
         _levelDesignerScript = GetComponent<LevelDesignerScript>();
         IconDistributer();
         _notificationPanel.SetActive(false);
+        _spinScript._playButton.onClick.AddListener(PlayButtonFunction);
     }
     private void Start()
     {
-        
+
     }
+    public Tween ObjectAppearAndDissappearTween(GameObject ObjectToScale, Vector3 TargetScale)
+    {
+        return ObjectToScale.transform.DOScale(TargetScale, _levelDesignerScript._wheelAppearDuration);
+    }
+    private void ObjectAppearAndDissappear(GameObject ObjectToScale, Vector3 TargetScale)
+    {
+         ObjectAppearAndDissappearTween(ObjectToScale, TargetScale).ForceInit();
+    }
+
+    public void PlayButtonFunction()
+    {
+        ObjectAppearAndDissappear(_spinScript._playButton.gameObject, Vector3.zero);
+        _spinScript._playButton.interactable = false;
+        _levelDesignerScript.WheelLoader();
+    }
+
+    //For easy access
+    public void WheelApeear()
+    {
+        ObjectAppearAndDissappearTween(_spinScript._wheelParent, _spinScript._wheelScaleAtStart).ForceInit();
+    }
+    public void WheelDisapeear()
+    {
+        ObjectAppearAndDissappear(_spinScript._wheelParent, Vector3.zero);
+    }
+
     private void OnValidate()
     {
         if (_background)
@@ -91,6 +136,8 @@ public class PublicValuesAndFunctions : MonoBehaviour
     }
     public void ActivateNotificationPanel(bool ExitButtonFunction = true)
     {
+        _parcileCamera.enabled = !ExitButtonFunction;
+
         _notificationPanel.SetActive(ExitButtonFunction);
         AllButtons = FindObjectsOfType<Button>();
         for (int i = 0; i < AllButtons.Length; i++)
