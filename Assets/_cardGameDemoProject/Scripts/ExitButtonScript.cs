@@ -38,24 +38,6 @@ public class ExitButtonScript : MonoBehaviour
     }
     public void ButtonFunction()
     {
-        _publicValues.ActivateNotificationPanel(true);
-    }
-    private void TestFunction()
-    {
-        StartCoroutine(PrintClickedForSeconds(2, "Clicked", _exitButton));
-    }
-    private IEnumerator PrintClickedForSeconds(float SecondsToWait, string NewString, Button ButtonToApply)
-    {
-        _exitButton.interactable = false;
-        TextMeshProUGUI ButtonsText = ButtonToApply.GetComponentInChildren<TextMeshProUGUI>();
-        string PreviousString = ButtonsText.text;
-        while (SecondsToWait > 0)
-        {
-            ButtonsText.text = NewString + " (" + SecondsToWait + ")";
-            yield return new WaitForSeconds(1);
-            SecondsToWait--;
-        }
-        _exitButton.interactable = true;
-        ButtonsText.text = PreviousString;
+        _publicValues.ExitButton();
     }
 }

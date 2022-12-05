@@ -15,6 +15,3 @@ MonoBehaviour:
   _exitButton: Exit
   _backButton: Back To Game
   _loseAllButton: Lose All
-  _notificationQuestion: LOOSE ALL REWARDS?
-  _notification: ARE YOU SURE THAT YOU WANT TO EXIT? YOU WILL LOSE ALL THE REWARDS
-    YOU HAVE EARNED SO FAR

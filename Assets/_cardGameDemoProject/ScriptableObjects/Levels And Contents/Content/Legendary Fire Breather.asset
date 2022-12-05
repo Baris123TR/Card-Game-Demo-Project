@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Legendary Fire Breather
   m_EditorClassIdentifier: 
   _newNameString: Fire Breather
+  _iconPrefabToInstantiate: {fileID: 0}
   _itemType: 2
   _contentImage: {fileID: 21300000, guid: a363297da413b0a4da28b269fc5876f8, type: 3}
-  _bonusAmountRandomBetween: {x: 5, y: 10}
+  _bonusAmountRandomBetween: {x: 20, y: 40}
   _bonusAmountTextAndIconEnabled: 1
   _rarity: 4
   _generalColor: {r: 1, g: 0.56846285, b: 0, a: 1}

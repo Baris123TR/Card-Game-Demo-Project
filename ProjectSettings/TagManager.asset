@@ -16,6 +16,8 @@ TagManager:
   - UI_WeaponPoints
   - UI_GearPoints
   - Canvas
+  - LevelSlider
+  - NotificationPanel
   layers:
   - Default
   - TransparentFX

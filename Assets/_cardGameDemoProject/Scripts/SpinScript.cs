@@ -7,6 +7,8 @@ public class SpinScript : MonoBehaviour
 {
     PublicValuesAndFunctions _publicValues;
 
+
+
     public RectTransform _targetToSpin;
     public GameObject _wheelParent;
     public Button _spinButton;
@@ -29,15 +31,6 @@ public class SpinScript : MonoBehaviour
     {
         get
         {
-            /*if (RotationDuration > RotationAmountBetween.y || RotationDuration < RotationAmountBetween.x)
-            {
-                return RotationAmount;
-            }
-            else
-            {
-                return RotationDuration;
-            }*/
-
             return RotationDuration;
         }
     }
@@ -162,7 +155,7 @@ public class SpinScript : MonoBehaviour
         _choosenSlot = _slots[SlotNumber];
         //print(_choosenSlot);
         StartCoroutine(CardAppearIconFlyAnimation(_choosenSlot, Vector3.one * 1.5f, 6, _choosenSlotTransform.transform));
-        _publicValues.WheelDisapeear();
+        StartCoroutine(_publicValues.WheelDisapeear());
     }
 
     public GameObject[] _iconsSpawned;
@@ -170,7 +163,9 @@ public class SpinScript : MonoBehaviour
     IEnumerator CardAppearIconFlyAnimation(GameObject ChoosenSlotObject, Vector3 TargetVector, 
         int AmountOfIconsToAppear = 1, Transform TransformParent = null)
     {
-        yield return _publicValues.InstantiateObjectWithScaleTween(ChoosenSlotObject, TargetVector, TransformParent).WaitForCompletion();
+        GameObject InstantiatedCardObject = Instantiate(ChoosenSlotObject, TransformParent);
+
+        yield return _publicValues.InstantiateObjectWithScaleTween(InstantiatedCardObject, TargetVector, TransformParent, default, true).WaitForCompletion();
         GameObject IconObject = ChoosenSlotObject.GetComponentInChildren<EmptyBonusAmountIconGetScript>(true).gameObject;
 
         for (int i = 1; i <= AmountOfIconsToAppear; i++)
@@ -193,12 +188,13 @@ public class SpinScript : MonoBehaviour
             _iconsSpawned[i] = _cloneIconsParent.transform.GetChild(i).gameObject;
         }
 
-        StartCoroutine(GetItemTypeAndMoveItemsToTargetArea(ChoosenSlotObject));
+        StartCoroutine(GetItemType(ChoosenSlotObject, InstantiatedCardObject));
     }
-    IEnumerator GetItemTypeAndMoveItemsToTargetArea(GameObject ChoosenSlotObject)
+    IEnumerator GetItemType(GameObject ChoosenSlotObject, GameObject InstantiatedChoosenSlot = null)
     {
-        CollectedAreas[] _possessions = FindObjectsOfType<CollectedAreas>();
+        CollectedAreasTransformAndItemAmountScript[] _possessions = FindObjectsOfType<CollectedAreasTransformAndItemAmountScript>(true);
         var ChoosenSlotObjectType = ChoosenSlotObject.GetComponent<SlotContentDistributer>()._scriptableWheelItems._itemType;
+        int ChoosenSlotBonusAmount = ChoosenSlotObject.GetComponent<SlotContentDistributer>()._bonusAmount;
         GameObject TargetTransformGameObject = null;
         for (int i = 0; i < _possessions.Length; i++)
         {
@@ -208,22 +204,82 @@ public class SpinScript : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < _iconsSpawned.Length; i++)
+        _instantiatedChoosenSlot = InstantiatedChoosenSlot;
+
+        if (ChoosenSlotObjectType == ItemTypeIncludedScriptableObject.ItemType.Bomb)
         {
-            print(_iconsSpawned);
-            if (i == _iconsSpawned.Length)
+            _publicValues.BombConditionMenu();
+
+        }
+        else
+        {
+            TargetTransformGameObject.SetActive(true);
+
+            CollectedAreasTransformAndItemAmountScript TargetScriptToIncreaseBonus = TargetTransformGameObject.
+               GetComponent<CollectedAreasTransformAndItemAmountScript>();
+
+            yield return MoveItemsToTargetAreaAndDestroy(_iconsSpawned, TargetTransformGameObject.gameObject);
+
+            yield return TargetScriptToIncreaseBonus.TweenStarter(ChoosenSlotBonusAmount);
+
+            yield return NextLevelChooserAndStarter(false);
+        }
+    }
+    private GameObject _instantiatedChoosenSlot;
+    public IEnumerator NextLevelChooserAndStarter(bool BombRevive)
+    {
+        _publicValues._levelSliderScript.NextLevel();
+
+        yield return _publicValues._levelDesignerScript.WheelLoader();
+
+        yield return _publicValues.ObjectAppearAndDissappearTween(_instantiatedChoosenSlot, Vector3.zero).WaitForCompletion();
+
+        if (BombRevive)
+        {
+            Destroy(_instantiatedChoosenSlot);
+        }
+    }
+    IEnumerator MoveItemsToTargetAreaAndDestroy(GameObject[] ItemsToMove, GameObject TransformObject)
+    {
+        Sequence MoveSequence = DOTween.Sequence();
+        for (int i = 0; i < ItemsToMove.Length; i++)
+        {
+            if (i == 0)
             {
-                yield return MoveObjectToDesiredParentTween(_iconsSpawned[i].gameObject, TargetTransformGameObject.gameObject).WaitForCompletion();
+                MoveSequence.Append(MoveObjectToDesiredParentTween(ItemsToMove[i], TransformObject, default, true));
             }
             else
             {
-                yield return MoveObjectToDesiredParentTween(_iconsSpawned[i].gameObject, TargetTransformGameObject.gameObject);
+                MoveSequence.Join(MoveObjectToDesiredParentTween(ItemsToMove[i], TransformObject, default, true));
             }
         }
+        yield return MoveSequence.WaitForCompletion();
     }
-    public Tween MoveObjectToDesiredParentTween(GameObject ObjectToMove, GameObject DesiredParentObject)
+
+    
+
+    public Tween MoveObjectToDesiredParentTween(GameObject ObjectToMove, GameObject DesiredParentObject, bool LocalMoveToZero = true, bool DestroyAtEnding = false)
     {
-        ObjectToMove.transform.parent = DesiredParentObject.transform;
-        return ObjectToMove.transform.DOLocalMove(Vector3.zero, _publicValues._levelDesignerScript._itemsTweeningDuration);
+        if (LocalMoveToZero)
+        {
+            ObjectToMove.transform.parent = DesiredParentObject.transform;
+            return ObjectToMove.transform.DOLocalMove(Vector3.zero, _publicValues._itemsTweeningDuration).OnComplete(()=>
+            {
+                if (DestroyAtEnding)
+                {
+                    Destroy(ObjectToMove);
+                }
+            });
+        }
+        else
+        {
+            return ObjectToMove.transform.DOMove(DesiredParentObject.transform.position, _publicValues._itemsTweeningDuration).OnComplete(() =>
+            {
+                if (DestroyAtEnding)
+                {
+                    Destroy(ObjectToMove);
+                }
+            });
+        }
     }
 }

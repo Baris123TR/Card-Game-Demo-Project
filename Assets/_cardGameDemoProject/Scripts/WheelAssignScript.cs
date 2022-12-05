@@ -5,15 +5,24 @@ using UnityEngine.UI;
 
 public class WheelAssignScript : MonoBehaviour
 {
-    [Header("Scriptable Data")]
-    public ScriptableWheel _scriptableWheelData;
+    [HideInInspector] public ScriptableWheel _scriptableWheelData;
+
+    PublicValuesAndFunctions _publicValues;
+
     [Header("Hierarchy")]
     public Image _wheel;
     public Image _wheelIndicator;
     public Transform _slotsParentTransform;
     [HideInInspector] public List<SlotContentDistributer> _slotDistributerList;
 
+    private bool _ifEditor;
+
     private void Awake()
+    {
+        _ifEditor = false;
+        _publicValues = GameObject.FindWithTag("PublicValues").GetComponent<PublicValuesAndFunctions>();
+    }
+    private void Start()
     {
         
     }
@@ -32,6 +41,7 @@ public class WheelAssignScript : MonoBehaviour
     {
         if (_scriptableWheelData._type == ScriptableWheel.Type.Bronze)
         {
+            
             int RandomMemberIDForBomb = Random.Range(0, _slotDistributerList.Count);
             _slotDistributerList[RandomMemberIDForBomb]._scriptableWheelItems = _scriptableWheelData._bomb;
             _slotDistributerList.RemoveAt(RandomMemberIDForBomb);
@@ -49,22 +59,62 @@ public class WheelAssignScript : MonoBehaviour
             _wheel.sprite = _scriptableWheelData._wheelTypeData._goldWheel;
             _wheelIndicator.sprite = _scriptableWheelData._wheelTypeData._goldIndicator;
         }
-        if (_scriptableWheelData._fillContentRandomly)
+
+#if UNITY_EDITOR
+        _ifEditor = true;
+#endif
+        if (_ifEditor)
         {
-            for (int i = 0; i < _slotDistributerList.Count; i++)
+            if (_publicValues._bombEverySlot)
             {
-                _slotDistributerList[i]._scriptableWheelItems =
-                    _scriptableWheelData._scriptableContents[Random.Range(0, _scriptableWheelData._scriptableContents.Length)];
+                for (int i = 0; i < _slotDistributerList.Count; i++)
+                {
+                    _slotDistributerList[i]._scriptableWheelItems =
+                        _scriptableWheelData._bomb;
+                }
+            }
+            else
+            {
+                if (_scriptableWheelData._fillContentRandomly)
+                {
+                    for (int i = 0; i < _slotDistributerList.Count; i++)
+                    {
+                        _slotDistributerList[i]._scriptableWheelItems =
+                            _scriptableWheelData._scriptableContents[Random.Range(0, _scriptableWheelData._scriptableContents.Length)];
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _slotDistributerList.Count; i++)
+                    {
+                        if (i < _scriptableWheelData._scriptableContentsWithQueue.Length)
+                        {
+                            _slotDistributerList[i]._scriptableWheelItems =
+                                _scriptableWheelData._scriptableContentsWithQueue[i];
+                        }
+                    }
+                }
             }
         }
         else
         {
-            for (int i = 0; i < _slotDistributerList.Count; i++)
+            if (_scriptableWheelData._fillContentRandomly)
             {
-                if (i < _scriptableWheelData._scriptableContentsWithQueue.Length)
+                for (int i = 0; i < _slotDistributerList.Count; i++)
                 {
                     _slotDistributerList[i]._scriptableWheelItems =
-                        _scriptableWheelData._scriptableContentsWithQueue[i];
+                        _scriptableWheelData._scriptableContents[Random.Range(0, _scriptableWheelData._scriptableContents.Length)];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _slotDistributerList.Count; i++)
+                {
+                    if (i < _scriptableWheelData._scriptableContentsWithQueue.Length)
+                    {
+                        _slotDistributerList[i]._scriptableWheelItems =
+                            _scriptableWheelData._scriptableContentsWithQueue[i];
+                    }
                 }
             }
         }

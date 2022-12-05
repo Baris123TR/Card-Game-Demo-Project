@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: TurkishStrings
   m_EditorClassIdentifier: 
   _exitButton: "\xC7\u0131k\u0131\u015F"
+  _backButton: Geri
+  _loseAllButton: "Kaybet ve \xE7\u0131k"

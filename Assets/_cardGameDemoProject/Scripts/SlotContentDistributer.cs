@@ -8,7 +8,7 @@ public class SlotContentDistributer : MonoBehaviour
 {
     PublicValuesAndFunctions _publicValues;
 
-    /*[HideInInspector]*/ public ScriptableWheelContent _scriptableWheelItems;
+    [HideInInspector] public ScriptableWheelContent _scriptableWheelItems;
 
     [Header("Slot Hierarchy")]
     public Image _content;
@@ -30,31 +30,8 @@ public class SlotContentDistributer : MonoBehaviour
     {
         _publicValues = FindObjectOfType<PublicValuesAndFunctions>();
     }
-    
-    private void BombFunction()
-    {
-        print("Bomb selected.");
-    }
-
-    private void ClearContent()
-    {
-
-        _content.sprite = null;
-        _offerShine.enabled = false;
-        _weaponTypeBackgroundImage.enabled = false;
-        _weaponTypeNameText.text = null;
-        _name.text = null;
-        _particleSystem.Stop();
-        _bonusAmount = 0;
-        _bonusAmountText.enabled = false;
-        _flash.color = Color.white;
-        _bonusIcon.enabled = false;
-    }
-
     public void UpdateContent()
     {
-        /*ClearContent();*/
-
         _content.sprite = _scriptableWheelItems._contentImage;
         _content.SetNativeSize();
         _itemType.text = _scriptableWheelItems._itemType.ToString();

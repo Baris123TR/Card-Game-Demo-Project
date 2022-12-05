@@ -6,13 +6,18 @@ using UnityEngine.U2D;
 using TMPro;
 using UnityEngine.Rendering;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class PublicValuesAndFunctions : MonoBehaviour
 {
     [HideInInspector] public LevelDesignerScript _levelDesignerScript;
     [HideInInspector] public WheelAssignScript _wheelAssignScript;
+    [HideInInspector] public LevelSliderScript _levelSliderScript;
 
     [HideInInspector] public int _levelCount;
+
+    [Header("For Testing Purposes\n(Only On Editor)")]
+    public bool _bombEverySlot;
 
     [Header("Level Loader")]
     public SpinScript _spinScript;
@@ -27,7 +32,7 @@ public class PublicValuesAndFunctions : MonoBehaviour
     public Color _backgroundColor;
     public Image _background;
     [Header("Notification Panel")]
-    public GameObject _notificationPanel;
+    public GameObject _notificationPanelParent;
     public Button[] AllButtons;
     public Button[] PanelButtons;
 
@@ -65,6 +70,12 @@ public class PublicValuesAndFunctions : MonoBehaviour
     [Space(10)]
     [Header("DOTween Related")]
     public Vector2 _tweenCapacity = new Vector2(1000, 1000);
+    [Space(20)]
+    [Header("Tweening Durations")]
+    public float _levelPassDuration = 0.2f;
+    public float _wheelAppearDuration = 0.5f;
+    public float _itemsTweeningDuration = 0.5f;
+    public float _collectedAmountIncreaseTweeningDuration = 2;
     private void PublicDistributer(GameObject[] ObjectsToDistribute, Sprite IconToDistribute = null)
     {
         if (IconToDistribute)
@@ -95,9 +106,9 @@ public class PublicValuesAndFunctions : MonoBehaviour
         _spinScript._spinButton.interactable = false;
 
         _wheelAssignScript = GameObject.FindWithTag("Wheel").GetComponent<WheelAssignScript>();
+        _levelSliderScript = _levelSlider.transform.GetComponent<LevelSliderScript>();
         _levelDesignerScript = GetComponent<LevelDesignerScript>();
         IconDistributer();
-        _notificationPanel.SetActive(false);
         _spinScript._playButton.onClick.AddListener(PlayButtonFunction);
     }
     private void Start()
@@ -106,28 +117,29 @@ public class PublicValuesAndFunctions : MonoBehaviour
     }
     public Tween ObjectAppearAndDissappearTween(GameObject ObjectToScale, Vector3 TargetScale)
     {
-        return ObjectToScale.transform.DOScale(TargetScale, _levelDesignerScript._wheelAppearDuration);
+        /*print(ObjectToScale + " will be scaled to: " + TargetScale);*/
+        return ObjectToScale.transform.DOScale(TargetScale, _wheelAppearDuration);
     }
-    private void ObjectAppearAndDissappear(GameObject ObjectToScale, Vector3 TargetScale)
+    public IEnumerator ObjectAppearAndDissappear(GameObject ObjectToScale, Vector3 TargetScale)
     {
-         ObjectAppearAndDissappearTween(ObjectToScale, TargetScale).ForceInit();
+         yield return ObjectAppearAndDissappearTween(ObjectToScale, TargetScale);
     }
 
     public void PlayButtonFunction()
     {
-        ObjectAppearAndDissappear(_spinScript._playButton.gameObject, Vector3.zero);
+        StartCoroutine(ObjectAppearAndDissappear(_spinScript._playButton.gameObject, Vector3.zero));
         _spinScript._playButton.interactable = false;
-        _levelDesignerScript.WheelLoader();
+        StartCoroutine(_levelDesignerScript.WheelLoader());
     }
 
     //For easy access
-    public void WheelApeear()
+    public IEnumerator WheelApeear()
     {
-        ObjectAppearAndDissappearTween(_spinScript._wheelParent, _spinScript._wheelScaleAtStart).ForceInit();
+        yield return ObjectAppearAndDissappearTween(_spinScript._wheelParent, _spinScript._wheelScaleAtStart);
     }
-    public void WheelDisapeear()
+    public IEnumerator WheelDisapeear()
     {
-        ObjectAppearAndDissappear(_spinScript._wheelParent, Vector3.zero);
+        yield return ObjectAppearAndDissappearTween(_spinScript._wheelParent, Vector3.zero);
     }
 
     private void OnValidate()
@@ -137,28 +149,30 @@ public class PublicValuesAndFunctions : MonoBehaviour
             _background.color = _backgroundColor;
         }
     }
-    public void ActivateNotificationPanel(bool ExitButtonFunction = true)
+    public void ActivateNotificationPanel(bool ExitButtonFunction)
     {
         _parcileCamera.enabled = !ExitButtonFunction;
 
-        _notificationPanel.SetActive(ExitButtonFunction);
         AllButtons = FindObjectsOfType<Button>();
         for (int i = 0; i < AllButtons.Length; i++)
         {
             AllButtons[i].enabled = !ExitButtonFunction;
         }
-        PanelButtons = _notificationPanel.GetComponentsInChildren<Button>();
-        for (int i = 0; i < PanelButtons.Length; i++)
-        {
-            PanelButtons[i].enabled = ExitButtonFunction;
-        }
+
     }
     public Tween InstantiateObjectWithScaleTween(GameObject ObjectToInstantiateAndScale,
-       Vector3 TargetScaleOfInstantiatedObject, Transform TransformParent, bool ScatterAround = false)
+       Vector3 TargetScaleOfInstantiatedObject, Transform TransformParent, bool ScatterAround = false, bool OnlyScale = false)
     {
-        //print(ObjectToInstantiateAndScale + " will be instantiated and scaled.");
+        GameObject InstantiatedObject;
 
-        GameObject InstantiatedObject = Instantiate(ObjectToInstantiateAndScale, TransformParent);
+        if (OnlyScale)
+        {
+            InstantiatedObject = ObjectToInstantiateAndScale;
+        }
+        else
+        {
+            InstantiatedObject = Instantiate(ObjectToInstantiateAndScale, TransformParent);
+        }
 
         if (InstantiatedObject.GetComponent<SlotRotationFixer>())
         {
@@ -188,12 +202,66 @@ public class PublicValuesAndFunctions : MonoBehaviour
 
             return InstantiatedObject.transform.DOLocalMove(InstantiatedObject.transform.localPosition +
                 new Vector3(RandomVector.x, RandomVector.y, 0),
-                _levelDesignerScript._itemsTweeningDuration);
+                _itemsTweeningDuration);
         }
         else
         {
             return ObjectAppearAndDissappearTween(InstantiatedObject,
                 TargetScaleOfInstantiatedObject);
         }
+    }
+    public GameObject _exitButtonPrefab;
+    public GameObject _bombConditionMenuPrefab;
+    private string _notificationPanelString = "NotificationPanel";
+    private void InstantiateAndTag(GameObject ObjToInst)
+    {
+        ActivateNotificationPanel(true);
+        GameObject InstantiatedObj = Instantiate(ObjToInst, _notificationPanelParent.transform);
+        InstantiatedObj.tag = _notificationPanelString;
+    }
+    private void DestroyNotifications()
+    {
+        ActivateNotificationPanel(false);
+        Destroy(GameObject.FindWithTag(_notificationPanelString));
+    }
+    public void ExitButton()
+    {
+        InstantiateAndTag(_exitButtonPrefab);
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+    }
+
+    public void BackToGame(bool PayToBackFromBomb = false)
+    {
+        if (PayToBackFromBomb)
+        {
+            if (true)
+            {
+                //TODO: If enough coins paid, back to game. Directly back to game for now.
+                StartCoroutine(_spinScript.NextLevelChooserAndStarter(true));
+                DestroyNotifications();
+            }
+        }
+        else
+        {
+            DestroyNotifications();
+        }
+    }
+
+    public void BombConditionMenu()
+    {
+        InstantiateAndTag(_bombConditionMenuPrefab);
+    }
+    public void SaveTheEarnings()
+    {
+        print("Save method called.");
+    }
+    public void SaveAndExit()
+    {
+        SaveTheEarnings();
+        RestartScene();
     }
 }
